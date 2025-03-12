@@ -4,10 +4,11 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
+    <!-- Ocean BG: https://codepen.io/codypearce/pen/VwYOGzq -->
     <header>
-      <div>
+      <div class="title">
         <h1>
-          Sea Beats
+          Under the C
         </h1>
       </div>
     </header>
@@ -18,7 +19,22 @@
         </div>
       </div>
       <div class="center">
-        <div class="dot"></div>
+        <!-- Play button code from https://codepen.io/ainalem/pen/MWYrojE -->
+        <div class="play-button" onclick="this.classList.toggle('active')" width="400" height="400">
+          <div class="glow"x="0" y="0" width="0" height="0"></div>
+          <div class="fish" x="0" y="0" width="400" height="400">
+            <img src="AnglerFishSVG.svg" width="400" height="400">
+          </div>
+          <div class="background" x="0" y="0" width="200" height="200"></div>
+          <div class="icon" width="200" height="200">
+            <div class="part icon-left" x="0" y="0" width="200" height="200" fill="#fff"></div>
+            <div class="part icon-right" x="0" y="0" width="200" height="200" fill="#fff"></div>
+          </div>
+          <div class="pointer"></div>
+          <!-- <div class="fish">
+            <img src="anglerfish-blue.png">
+          </div> -->
+        </div>
       </div>
       <div class="right">
         <div class="button">
@@ -27,5 +43,26 @@
       </div>
     </section>
     <footer></footer>
+    <div class="ocean">
+      <div class="bubble bubble--1"></div>
+      <div class="bubble bubble--2"></div>
+      <div class="bubble bubble--3"></div>
+      <div class="bubble bubble--4"></div>
+      <div class="bubble bubble--5"></div>
+      <div class="bubble bubble--6"></div>
+      <div class="bubble bubble--7"></div>
+      <div class="bubble bubble--8"></div>
+      <div class="bubble bubble--9"></div>
+      <div class="bubble bubble--10"></div>
+      <div class="bubble bubble--11"></div>
+      <div class="bubble bubble--12"></div>
+    </div>
   </body>
 </html>
+<script src="https://unpkg.com/tone"></script>
+<script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js?v=1"></script>
+<script src="chordGenerator.js"></script>
+<script src="script.js"></script>
+<script>
+  initializeComponents()
+</script>
