@@ -176,7 +176,7 @@ function playDrum(time, notes) {
     let i = 0;
     for (const inst in notes) {
         if (rands[i] < notes[inst]) {
-            drumset.player(inst).start();
+            drumset.player(inst).start(time);
         }
         i++;
     }
