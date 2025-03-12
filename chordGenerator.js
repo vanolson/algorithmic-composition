@@ -25,7 +25,7 @@ class ChordGenerator {
     setNextChord() {
         const current = this.nextChord;
         const rand = Math.random();
-        console.log(rand)
+        // console.log(rand)
         for (let [type, p] of Object.entries(this.probabilityMapping[this.level])) {
             if (rand <= p) {
                 if (this.chordMapping.hasOwnProperty(current) && this.chordMapping[current].hasOwnProperty(type)) {
@@ -99,15 +99,15 @@ class ChordGenerator {
         let additives = []
         if (Math.random() > this.probability.normal) {
             additives.push(seventh);
-            console.log(`added interval ${seventh}`);
+            // console.log(`added interval ${seventh}`);
         }
         if (Math.random() > this.probability.funky) {
             additives.push(ninth);
-            console.log(`added interval ${ninth}`);
+            // console.log(`added interval ${ninth}`);
         }
         let additiveNotes = this.noteNumbersToNoteArray(additives);
         this.chordNoteArray = this.chordNoteArray.concat(additiveNotes.map((n) => `${n}5`));
-        console.log("CNA", this.chordNoteArray);
+        // console.log("CNA", this.chordNoteArray);
     }
 
     setProbability() {
@@ -132,8 +132,8 @@ class ChordGenerator {
     noteNumbersToNoteArray(noteNums) {
         const notes = this.notes;
         const noteIndex = notes.indexOf(this.intervalNoteToLetterNote(this.nextChord, this.key));
-        console.log(noteNums, notes.length, noteIndex);
-        console.log((noteIndex + noteNums[0]) % notes.length);
+        // console.log(noteNums, notes.length, noteIndex);
+        // console.log((noteIndex + noteNums[0]) % notes.length);
 
         return noteNums.map((n) => notes[(noteIndex + n) % notes.length])
     }
@@ -236,7 +236,7 @@ class ChordGenerator {
         /* vii CHORD */
         chordMapping['vii'] = {
             normal: ['I'],
-            funky: ['vii', 'V', 'vii'],
+            funky: ['i', 'V', 'vi'],
         }
 
         /* Soft support for minor key */
@@ -348,7 +348,7 @@ class ChordGenerator {
 
         const notIncluded = chordList.filter((c) => !Object.keys(chordMapping).includes(c));
         if (notIncluded.length > 0) {
-            console.log("Note to self: chords not included are", notIncluded);
+            // console.log("Note to self: chords not included are", notIncluded);
         }
 
         // 'weird' chords are the ones not included in normal or funky
@@ -356,7 +356,7 @@ class ChordGenerator {
             info.weird = chordList.filter((c) => chord != c && !info.normal.includes(c) && !info.funky.includes(c))
         }
 
-        console.log(chordMapping)
+        // console.log(chordMapping)
         return chordMapping;
     }
     

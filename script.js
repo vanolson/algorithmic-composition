@@ -113,7 +113,7 @@ channel.toDestination();
 const bass = new Tone.Synth();
 bassReverb = new Tone.Reverb(2, 0.1);
 bassReverb.set({
-    wet: 0.7,
+    wet: 0.5,
 })
 
 bass.connect(bassReverb)
@@ -127,8 +127,8 @@ new Tone.Sequence(playDrum, drumPatternTranspose, '8n').start();
 function initializeComponents() {
     chordGenerator = new ChordGenerator('C', 'I');
 
-    const playButton = nn.get('.play-button');
-    playButton.addEventListener('click', triggerStartStop);
+    const playButton = nn.get('.play-button .pointer');
+    playButton.addEventListener('click', playButtonClick);
 
     const leftButton = nn.get('.left .button');
     const rightButton = nn.get('.right .button');
@@ -137,24 +137,33 @@ function initializeComponents() {
     rightButton.addEventListener('click', normaler);
 }
 
+function playButtonClick() {
+    triggerStartStop();
+
+    const playButtonDiv = nn.get('.play-button');
+    playButtonDiv.classList.toggle('active');
+    
+    const title = nn.get('.title h1')
+    title.classList.remove('on-right-side');
+    title.classList.remove('on-left-side');
+}
+
 function triggerStartStop() {
     if (Tone.Transport.state === 'stopped') {
-        console.log('started!');
+        // console.log('started!');
         Tone.getTransport().start();
     } 
     else {
-        console.log('stopped!');
+        // console.log('stopped!');
         Tone.getTransport().stop();
     }
-    nn.get('.title h1')
-        .css({'text-shadow': '0px 6px 3px var(--center-color)'});
 }
 
 function playSynth(time) {
-    console.log(time);
-    console.log(chordGenerator)
-    console.log('BN', chordGenerator.bassNote)
-    console.log('CNA', chordGenerator.chordNoteArray)
+    // console.log(time);
+    // console.log(chordGenerator)
+    // console.log('BN', chordGenerator.bassNote)
+    // console.log('CNA', chordGenerator.chordNoteArray)
     bass.triggerAttackRelease(chordGenerator.bassNote, '1n', time)
     synth.triggerAttackRelease(chordGenerator.chordNoteArray, '1n', time);
     chordGenerator.setNextChord();
@@ -173,17 +182,69 @@ function playDrum(time, notes) {
     }
 }
 
+function handleFishSide() {
+    const fishDiv = nn.get('.fish');
+    if (chordGenerator.level === 2) {
+        fishDiv.classList.remove('on-left-side');
+        fishDiv.classList.remove('on-right-side');
+    }
+    else if (chordGenerator.level < 2) {
+        fishDiv.classList.add('on-left-side');
+    }
+    else {
+        fishDiv.classList.add('on-right-side');
+    }
+
+    // now fish position
+    const playButtonDiv = nn.get('.play-button');
+    // console.log(chordGenerator.level);
+    switch (chordGenerator.level) {
+        case 0: 
+            playButtonDiv.classList.remove('middle-left');
+            playButtonDiv.classList.add('far-left');
+            break;
+        case 1: 
+            playButtonDiv.classList.remove('far-left');
+            playButtonDiv.classList.add('middle-left');
+            break;
+        case 2: 
+            playButtonDiv.classList.remove('middle-left');
+            playButtonDiv.classList.remove('middle-right');
+            break;
+        case 3: 
+            playButtonDiv.classList.remove('far-right');
+            playButtonDiv.classList.add('middle-right');
+            break;
+        case 4: 
+            playButtonDiv.classList.remove('middle-right');
+            playButtonDiv.classList.add('far-right');
+            break;
+    }
+}
+
 function weirder() {
     chordGenerator.weirder();
-    console.log('weirder!');
+    // console.log('weirder!');
     // Edit the css for the title
-    nn.get('.title h1')
-        .css({'text-shadow': '-6px 6px 3px var(--left-color)'});
+    const title = nn.get('.title h1')
+    title.classList.add('on-left-side');
+    title.classList.remove('on-right-side');
+    
+    const playButtonDiv = nn.get('.play-button');
+    playButtonDiv.classList.add('facing-left');
+    playButtonDiv.classList.remove('facing-right');
+    handleFishSide()
 }
 
 function normaler() {
     chordGenerator.normaler();
-    console.log('normaler!');
-    nn.get('.title h1')
-        .css({'text-shadow': '6px 6px 3px var(--right-color)'});
+    // console.log('normaler!');
+    const title = nn.get('.title h1');
+    title.classList.remove('on-left-side');
+    title.classList.add('on-right-side');
+
+    const playButtonDiv = nn.get('.play-button');
+    playButtonDiv.classList.add('facing-right');
+    playButtonDiv.classList.remove('facing-left');
+    handleFishSide()
 }

@@ -7,13 +7,19 @@
   --left-color: #79fdc8;
   --left-color-light: #c0ffe6;
   --left-glow: #79fdc867;
+  --left-fish-glow: #b8ffe2;
   --center-color: #79b5fd;
   --center-glow: #b4d6ff;
   --center-light-glow: #b4d6ffcd;
   --right-color: #b779fd;
   --right-color-light: #d2aaff;
   --right-glow: #b779fd8e;
+  --right-fish-glow: #dec1fe;
   --title-color:#d4e8ff;
+  --play-button-translation-right: translate(172px, -90px);
+  --play-button-translation-left: translate(-172px, -90px);
+  --play-icon-translation-right-rotated: translate(90px, 172px);
+  --play-icon-translation-left-rotated: translate(90px, -172px);
 }
 
 html, body {
@@ -49,6 +55,17 @@ h1 {
   text-shadow: 0px 6px 3px var(--center-color);
   font-size: 100px;
   margin: 0;
+  transition: text-shadow 1s;
+}
+
+h1.on-right-side {
+  text-shadow: 6px 6px 3px var(--right-color);
+  transition: text-shadow 1s;
+}
+
+h1.on-left-side {
+  text-shadow: -6px 6px 3px var(--left-color);
+  transition: text-shadow 1s;
 }
 
 section {
@@ -64,7 +81,6 @@ section {
   /* width: 100%; */
   /* align-self: center; */
   flex: 1 1 auto;
-  margin-bottom: 50px;
   /* max-height: 100vh; */
 
   .left .button {
@@ -115,7 +131,7 @@ section {
 
   .center {
     /* width:70%; */
-    /* display: inline-block; */
+    display: inline-block;
     /* width: 200px; */
     min-width: 400px;
     height: 400px;
@@ -139,6 +155,28 @@ section {
   align-items: center;
   display: flex;
   justify-content: center;
+  width: 400px;
+  position: relative;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 1s;
+}
+.play-button.far-left {
+  transform: translate(-100%, -50%);
+  transition: transform 1s;
+}
+.play-button.middle-left {
+  transform: translate(-75%, -50%);
+  transition: transform 1s;
+}
+.play-button.middle-right {
+  transform: translate(-25%, -50%);
+  transition: transform 1s;
+}
+.play-button.far-right {
+  transform: translate(0%, -50%);
+  transition: transform 1s;
 }
 .glow {
   position:absolute;
@@ -152,13 +190,22 @@ section {
   height: 400px;
   width: 400px;
 }
-.fish img {
+.fish {
   /* Convert image to color: https://codepen.io/sosuke/pen/Pjoqqp */
   filter: invert(64%) sepia(69%) saturate(619%) hue-rotate(184deg) brightness(100%) contrast(99%) opacity(40%) drop-shadow(0px 10px 10px var(--center-glow));
   transform: scaleX(-1);
+  transition: transform 1s, filter 1s;
+}
+.fish.on-right-side {
+  filter: invert(64%) sepia(69%) saturate(619%) hue-rotate(184deg) brightness(100%) contrast(99%) opacity(40%) drop-shadow(10px 10px 10px var(--right-fish-glow));
+  transition: transform 1s, filter 1s;
+}
+.fish.on-left-side {
+  filter: invert(64%) sepia(69%) saturate(619%) hue-rotate(184deg) brightness(100%) contrast(99%) opacity(40%) drop-shadow(-10px 10px 10px var(--left-fish-glow));
+  transition: transform 1s, filter 1s;
 }
 .background {
-  background: var(--center-color);
+  background: var(--center-glow);
   background-size: 100%;
   border-radius: 50%;
   box-shadow: 0px 0px 70px 120px var(--center-light-glow);
@@ -167,17 +214,16 @@ section {
   height: 70px;
   position: absolute;
   width: 70px;
-  transform: translate(175px, -90px);
-}
-.play-button:active .background {
-  /* background: var(--center-color); */
+  transform:  var(--play-button-translation-right);
+  transition: transform 1s;
 }
 .icon {
   height: 200px;
   transform: rotate(-120deg);
   transition: transform 500ms;
   width: 200px;
-  transform: translate(175px, -90px);
+  transform:  var(--play-button-translation-right);
+  transition: transform 1s;
 }
 .part {
   background: white;
@@ -326,14 +372,15 @@ section {
 .pointer {
   border-radius: 50%;
   cursor: pointer;
-  height: 100px;
+  height: 70px;
   position: absolute;
   -webkit-tap-highlight-color: transparent;
-  width: 100px;
-  transform: translate(175px, -90px);
+  width: 70px;
+  transform:  var(--play-button-translation-right);
+  transition: transform 1s;
 }
 .active .icon {
-  transform: rotate(-90deg) translate(90px, 175px);
+  transform: rotate(-90deg) var(--play-icon-translation-right-rotated);
 }
 .active .icon-left {
   clip-path: polygon(
@@ -472,12 +519,35 @@ section {
   );
 }
 
+.facing-left {
+  .background {
+    transform:  var(--play-button-translation-left);
+    transition: transform 1s;
+  }
+  .icon {
+    transform: var(--play-button-translation-left);
+    transition: transform 1s;
+  }
+  .fish {
+    transform: scaleX(1);
+    transition: transform 1s, filter 1s;
+  }
+  .pointer {
+    transform:  var(--play-button-translation-left);
+    transition: transform 1s;
+  }
+}
+
+.facing-left.active .icon {
+  transform: rotate(-90deg) var(--play-icon-translation-left-rotated);
+}
+
 /* Ocean CSS from https://codepen.io/codypearce/pen/VwYOGzq */
 body {
   margin: 0;
   overflow: hidden;
   background-color: black;;
-  background-image: linear-gradient(0deg, var(--background-color) 50%, var(--background-blue-dark) 100%);
+  background-image: linear-gradient(0deg, var(--background-color) 20%, var(--background-blue-dark) 80%, var(--background-blue-light) 100%);
 }
 
 .ocean {
